@@ -74,6 +74,45 @@ app.post("/users", (req, res) => {
       return;
     });
 });
+
+app.put("/users/:id", async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const updated_email = req.body.email;
+    const updated_name = req.body.name;
+    const updated_gender = req.body.gender;
+    const updated_weight = req.body.weight;
+    const updated_height = req.body.height;
+    const updated_bmi = req.body.bmi;
+    const updated_completed = req.body.completed;
+
+    User.findOneAndUpdate(
+      { _id: _id },
+      {
+        $set: {
+          email: updated_email,
+          name: updated_name,
+          gender: updated_gender,
+          weight: updated_weight,
+          height: updated_height,
+          bmi: updated_bmi,
+          completed: updated_completed,
+        },
+      },
+      { new: true },
+      (err, data) => {
+        if (data == null) {
+          res.send("nothing found");
+        } else {
+          res.send(data);
+        }
+      }
+    );
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 app.get("/users", async (req, res) => {
   try {
     const userData = await User.find();
@@ -86,7 +125,7 @@ app.get("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
   try {
     const _id = req.params.id;
-    const userData = await Doctor.findById(_id);
+    const userData = await User.findById(_id);
     if (!userData) {
       return res.status(404).send();
     } else {
