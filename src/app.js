@@ -5,6 +5,8 @@ var cors = require("cors");
 
 const Doctor = require("./models/doctors");
 const User = require("./models/users");
+const Yoga = require("./models/yogaExercise");
+const BodyweightExercise = require("./models/bodyweightExercise");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -131,6 +133,27 @@ app.get("/users/:id", async (req, res) => {
     } else {
       return res.send(userData);
     }
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// yoga
+app.get("/yoga", async (req, res) => {
+  try {
+    const yogaData = await Yoga.find();
+    res.send(yogaData);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// body weight exercise
+
+app.get("/bodyweightexercise", async (req, res) => {
+  try {
+    const bodyweightExerciseData = await BodyweightExercise.find();
+    res.send(bodyweightExerciseData);
   } catch (err) {
     res.send(err);
   }
