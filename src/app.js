@@ -6,6 +6,7 @@ var cors = require("cors");
 const Doctor = require("./models/doctors");
 const User = require("./models/users");
 const Yoga = require("./models/yogaExercise");
+const Tips = require("./models/tips");
 const BodyweightExercise = require("./models/bodyweightExercise");
 
 const app = express();
@@ -16,6 +17,30 @@ app.use(express.json());
 
 app.get("", (req, res) => {
   res.send("hello");
+});
+
+//Tips API
+app.get("/tips", async (req, res) => {
+  try {
+    const tipsData = await Tips.find();
+    res.send(tipsData);
+  } catch (err) {
+    res.send(err);
+  }
+});
+app.get("/tips/:disease", async (req, res) => {
+  try {
+    const disease = req.param("disease");
+    console.log(disease);
+    const tipsData = await Tips.find({ Disease_name: disease });
+    if (!tipsData) {
+      return res.status(404).send();
+    } else {
+      return res.send(tipsData);
+    }
+  } catch (err) {
+    res.send(err);
+  }
 });
 // Doctor Api
 app.post("/doctors", (req, res) => {
